@@ -81,17 +81,25 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Company $company)
     {
-        //
+        return Inertia::render('Main/Companies/Edit',[
+            'company' => $company
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Company $company)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', "unique:companies,name,{$company->id}"],
+            'is_active' => ['required', 'boolean']
+        ]);
+
+        $company->update($data);
+        return redirect()->route('companies.index');
     }
 
     /**

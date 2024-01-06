@@ -7,20 +7,25 @@ import { Button, buttonVariants } from "@/Components/ui/button";
 import { InfoIcon } from "lucide-react";
 import { Label } from "@/Components/ui/label";
 import { Switch } from "@/Components/ui/switch";
-import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
 import { FormEvent } from "react";
 import InputError from "@/Components/InputError";
+import { Company } from "@/types/models";
+import { toast } from "sonner";
 
-const EditCompanyPage = () => {
-    const { data, post, setData, errors, processing } = useForm({
-        name: "",
-        is_active: false,
+const EditCompanyPage = ({ company }: { company: Company }) => {
+    const { data, put, setData, errors, processing } = useForm({
+        name: company.name,
+        is_active: company.is_active,
     });
 
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
 
-        post(route("companies.store"));
+        put(route("companies.update", { company: company.id }), {
+            onSuccess: (res) => {
+                toast.success("Record has been updated");
+            },
+        });
     }
 
     return (
@@ -31,6 +36,7 @@ const EditCompanyPage = () => {
                     <div>
                         <Label htmlFor="name">Edit Name</Label>
                         <Input
+                            value={data.name}
                             type="text"
                             className="sm:w-[500px] mt-1 w-full"
                             onChange={(e) => setData("name", e.target.value)}
@@ -39,6 +45,7 @@ const EditCompanyPage = () => {
                     </div>
                     <div className="flex items-center space-x-2 mt-4">
                         <Switch
+                            checked={data.is_active}
                             onCheckedChange={() =>
                                 setData("is_active", !data.is_active)
                             }
@@ -52,19 +59,9 @@ const EditCompanyPage = () => {
                             className="mt-2"
                         />
                     </div>
-                    <div className="mt-4 sm:w-[500px] w-full">
-                        <Alert>
-                            <InfoIcon className="h-4 w-4" />
-                            <AlertTitle>Heads up!</AlertTitle>
-                            <AlertDescription>
-                                It is suggested to complete all neccessary data
-                                and setup before setting the status to active
-                            </AlertDescription>
-                        </Alert>
-                    </div>
                     <div className="mt-7 flex space-x-2 items-center">
                         <Button type="submit" disabled={processing}>
-                            {!processing ? "Save" : "Saving..."}
+                            {!processing ? "Save changes" : "Saving..."}
                         </Button>
                         <Link
                             href="/companies"
@@ -74,6 +71,12 @@ const EditCompanyPage = () => {
                         </Link>
                     </div>
                 </form>
+                <div className="mt-10 sm:w-[500px] w-full">
+                    <hr className="w-full" />
+                    <div className="mt-10">
+                        <Button variant="destructive">Delete</Button>
+                    </div>
+                </div>
             </div>
         </>
     );

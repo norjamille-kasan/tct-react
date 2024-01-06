@@ -76,12 +76,24 @@ const CompaniesPage = ({
                                         <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
+                                                    <Link
+                                                        href={route(
+                                                            "companies.edit",
+                                                            {
+                                                                company:
+                                                                    company.id,
+                                                            }
+                                                        )}
+                                                        className={buttonVariants(
+                                                            {
+                                                                variant:
+                                                                    "ghost",
+                                                                size: "sm",
+                                                            }
+                                                        )}
                                                     >
                                                         <PencilIcon className="h-4 w-4" />
-                                                    </Button>
+                                                    </Link>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
                                                     <p>Edit Company</p>

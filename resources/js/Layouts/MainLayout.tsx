@@ -1,5 +1,5 @@
 import { User } from "@/types";
-import { PropsWithChildren, ReactNode, useState, Fragment } from "react";
+import { PropsWithChildren, useState, Fragment, useEffect } from "react";
 import {
     AlignLeftIcon,
     BarChartBigIcon,
@@ -8,17 +8,16 @@ import {
     MessageSquareIcon,
     RocketIcon,
     UnlockKeyholeIcon,
-    User2Icon,
     UsersRoundIcon,
     XIcon,
 } from "lucide-react";
-import { Link } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/Components/ui/button";
 import { UserDropdown } from "@/Pages/Main/Partials/UserDropdown";
 import { Separator } from "@/Components/ui/separator";
 import { Transition } from "@headlessui/react";
-
+import { Toaster } from "@/Components/ui/sonner";
 type Breadcrumb = {
     link: string;
     label: string;
@@ -379,8 +378,8 @@ export default function AdminLayout({
                                                             index ===
                                                             breadcrumbs.length -
                                                                 1
-                                                                ? "text-white"
-                                                                : "text-gray-900 dark:text-gray-50"
+                                                                ? "text-gray-900 dark:text-white"
+                                                                : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                                                         }`}
                                                     >
                                                         {path.label}
@@ -423,6 +422,7 @@ export default function AdminLayout({
                     </main>
                 </div>
             </div>
+            <Toaster position="top-center" />
         </>
     );
 }

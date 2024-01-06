@@ -19,6 +19,7 @@ import { Switch } from "@/Components/ui/switch";
 import { Alert, AlertDescription, AlertTitle } from "@/Components/ui/alert";
 import { FormEvent } from "react";
 import InputError from "@/Components/InputError";
+import { toast } from "sonner";
 
 const CreateCompanyPage = () => {
     const { data, post, setData, errors, processing } = useForm({
@@ -29,7 +30,11 @@ const CreateCompanyPage = () => {
     function handleSubmit(e: FormEvent) {
         e.preventDefault();
 
-        post(route("companies.store"));
+        post(route("companies.store"), {
+            onSuccess: (res) => {
+                toast.success("Record has been saved");
+            },
+        });
     }
 
     return (
