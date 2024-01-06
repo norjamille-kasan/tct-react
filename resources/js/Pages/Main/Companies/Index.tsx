@@ -1,4 +1,4 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { PageProps } from "@/types";
 import MainLayout from "@/Layouts/MainLayout";
 import { Company, Paginate } from "@/types/models";
@@ -20,19 +20,40 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/Components/ui/tooltip";
+import { useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
+import { pickBy } from "lodash";
+import Pagination from "@/Components/Pagination";
 
 const CompaniesPage = ({
     companies,
-}: PageProps & { companies: Paginate<Company> }) => {
+    filters,
+}: PageProps & {
+    companies: Paginate<Company>;
+    filters: { search: string };
+}) => {
+    const [search, setSearch] = useState("");
+
+    const debounced = useDebouncedCallback((value) => {
+        setSearch(value);
+        router.get(route("companies.index"), pickBy({ search: value }), {
+            preserveScroll: true,
+            replace: true,
+            preserveState: true,
+        });
+    }, 1000);
+
     return (
         <>
             <Head title="Companies" />
             <div className="flex justify-between items-center mb-5">
                 <div className="">
                     <Input
-                        type="search"
+                        defaultValue={filters.search ?? ""}
                         className="sm:w-80"
+                        type="search"
                         placeholder="Search..."
+                        onChange={(e) => debounced(e.target.value)}
                     />
                 </div>
                 <div>
@@ -96,7 +117,7 @@ const CompaniesPage = ({
                                                     </Link>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
-                                                    <p>Edit Company</p>
+                                                    <p>Edit</p>
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
@@ -111,7 +132,7 @@ const CompaniesPage = ({
                                                     </Button>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
-                                                    <p>Advance Settings</p>
+                                                    <p>Manage</p>
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
@@ -133,6 +154,9 @@ const CompaniesPage = ({
                         )}
                     </TableBody>
                 </Table>
+            </div>
+            <div className="mt-3">
+                <Pagination links={companies.links} />
             </div>
         </>
     );

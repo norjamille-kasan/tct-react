@@ -4,7 +4,6 @@ import MainLayout from "@/Layouts/MainLayout";
 
 import { Input } from "@/Components/ui/input";
 import { Button, buttonVariants } from "@/Components/ui/button";
-import { InfoIcon } from "lucide-react";
 import { Label } from "@/Components/ui/label";
 import { Switch } from "@/Components/ui/switch";
 import { FormEvent } from "react";
@@ -71,12 +70,6 @@ const EditCompanyPage = ({ company }: { company: Company }) => {
                         </Link>
                     </div>
                 </form>
-                <div className="mt-10 sm:w-[500px] w-full">
-                    <hr className="w-full" />
-                    <div className="mt-10">
-                        <Button variant="destructive">Delete</Button>
-                    </div>
-                </div>
             </div>
         </>
     );

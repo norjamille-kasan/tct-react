@@ -28,7 +28,6 @@ export default function AdminLayout({
     children,
 }: PropsWithChildren<{ user: User; breadcrumbs?: Breadcrumb[] }>) {
     const [openMobileNav, setOpenMobileNav] = useState(false);
-
     return (
         <>
             <div>
@@ -417,7 +416,7 @@ export default function AdminLayout({
                         </div>
                     </div>
 
-                    <main className="py-4">
+                    <main className="py-8">
                         <div className="px-4 sm:px-6 lg:px-8">{children}</div>
                     </main>
                 </div>

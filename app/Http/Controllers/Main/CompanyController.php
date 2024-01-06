@@ -13,17 +13,23 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+
         return Inertia::render('Main/Companies/Index', [
             'companies' => Company::query()
+                ->when($request->input('search'),function($query) use($request){
+                    $query->where('name','like',"%{$request->input('search')}%");
+                })
                 ->paginate(10)
+                ->appends(['search'=>$request->input('search')])
                 ->through(fn ($company) => [
                     'id' => $company->id,
                     'name' => $company->name,
                     'is_active' => $company->is_active,
                     'created_at' => $company->created_at->format('M d, Y h:i A'),
                 ]),
+            'filters'=>$request->only('search')
         ]);
     }
 
