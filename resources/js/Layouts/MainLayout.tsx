@@ -359,7 +359,8 @@ export default function AdminLayout({
                                         {breadcrumbs.map((path, index) => (
                                             <Fragment key={index}>
                                                 {index > 0 && <span>/</span>}
-                                                {path.link ? (
+                                                {path.link &&
+                                                path.link !== "#" ? (
                                                     <Link
                                                         className={`${
                                                             index ===

@@ -1,4 +1,4 @@
-import { Head, useForm } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { PageProps } from "@/types";
 import MainLayout from "@/Layouts/MainLayout";
 import { Company, Paginate } from "@/types/models";
@@ -11,9 +11,15 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 import { Input } from "@/Components/ui/input";
-import { Button } from "@/Components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { Button, buttonVariants } from "@/Components/ui/button";
+import { CogIcon, PencilIcon, PlusIcon } from "lucide-react";
 import { Badge } from "@/Components/ui/badge";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/Components/ui/tooltip";
 
 const CompaniesPage = ({
     companies,
@@ -30,10 +36,13 @@ const CompaniesPage = ({
                     />
                 </div>
                 <div>
-                    <Button>
+                    <Link
+                        href={route("companies.create")}
+                        className={buttonVariants({ variant: "default" })}
+                    >
                         <PlusIcon className="h-5 w-5 mr-1" />
                         New Company
-                    </Button>
+                    </Link>
                 </div>
             </div>
             <div className="border rounded-lg overflow-hidden">
@@ -43,7 +52,7 @@ const CompaniesPage = ({
                             <TableHead>Name</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Added At</TableHead>
-                            <TableHead className="text-right">Amount</TableHead>
+                            <TableHead className="text-right"></TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -63,7 +72,38 @@ const CompaniesPage = ({
                                 </TableCell>
                                 <TableCell>{company.created_at}</TableCell>
                                 <TableCell className="text-right">
-                                    $250.00
+                                    <div className="-my-2 flex justify-end space-x-1 items-center">
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
+                                                        <PencilIcon className="h-4 w-4" />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Edit Company</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                    >
+                                                        <CogIcon className="h-4 w-4" />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>Advance Settings</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ))}
