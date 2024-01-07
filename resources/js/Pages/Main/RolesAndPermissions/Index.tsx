@@ -5,7 +5,6 @@ import MainLayout from "@/Layouts/MainLayout";
 const RolesAndPermissionsPage = ({ auth }: PageProps) => {
     return (
         <>
-            <Head title="Users" />
             <div>
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                 Adipisci hic voluptatibus veniam atque debitis officiis rem iste

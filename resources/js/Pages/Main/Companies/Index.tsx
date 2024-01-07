@@ -45,7 +45,6 @@ const CompaniesPage = ({
 
     return (
         <>
-            <Head title="Companies" />
             <div className="flex justify-between items-center mb-5">
                 <div className="">
                     <Input
@@ -124,12 +123,24 @@ const CompaniesPage = ({
                                         <TooltipProvider>
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
+                                                    <Link
+                                                        href={route(
+                                                            "companies.show",
+                                                            {
+                                                                company:
+                                                                    company.id,
+                                                            }
+                                                        )}
+                                                        className={buttonVariants(
+                                                            {
+                                                                variant:
+                                                                    "ghost",
+                                                                size: "sm",
+                                                            }
+                                                        )}
                                                     >
                                                         <CogIcon className="h-4 w-4" />
-                                                    </Button>
+                                                    </Link>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
                                                     <p>Manage</p>

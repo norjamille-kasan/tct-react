@@ -39,7 +39,6 @@ const CreateCompanyPage = () => {
 
     return (
         <>
-            <Head title="Create Company" />
             <div>
                 <form onSubmit={handleSubmit}>
                     <div>

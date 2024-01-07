@@ -29,7 +29,6 @@ const EditCompanyPage = ({ company }: { company: Company }) => {
 
     return (
         <>
-            <Head title="Edit Company" />
             <div>
                 <form onSubmit={handleSubmit}>
                     <div>

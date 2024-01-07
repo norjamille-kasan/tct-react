@@ -14,7 +14,7 @@ if (prefersDark) {
 }
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${appName}`,
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.tsx`,

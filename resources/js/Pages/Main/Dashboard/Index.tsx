@@ -16,7 +16,6 @@ import { TaskActivity } from "./Partials/TaskActivity";
 const DashboardPage = ({ auth }: PageProps) => {
     return (
         <>
-            <Head title="Dashboard" />
             <div>
                 <Tabs defaultValue="overview" className="space-y-4">
                     <TabsList>
