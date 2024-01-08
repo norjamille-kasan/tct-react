@@ -30,7 +30,7 @@ import {
     AccordionTrigger,
 } from "@/Components/ui/accordion";
 import { useForm } from "@inertiajs/react";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import InputError from "@/Components/InputError";
@@ -42,11 +42,24 @@ const ShowCompanyPage = ({ company }: { company: Company }) => {
         processing: create_segment_processing,
         post: create_segment,
         setData: create_segment_set_data,
+        reset: create_segment_reset,
     } = useForm({
         name: "",
     });
 
     const [openCreateSegmentModal, setOpenCreateSegmentModal] = useState(false);
+
+    const handleCreateSegment = (e: FormEvent) => {
+        e.preventDefault();
+
+        create_segment(route("segment.store"), {
+            onSuccess() {
+                create_segment_reset();
+            },
+            preserveScroll: true,
+            preserveState: true,
+        });
+    };
 
     return (
         <>
