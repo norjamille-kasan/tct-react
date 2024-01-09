@@ -33,3 +33,11 @@ export type Company = {
     created_at: string | null;
     updated_at: string | null;
 };
+
+export type Segment = {
+    id: number;
+    name: string;
+    company_id: number;
+    created_at: string | null;
+    updated_at: string | null;
+};

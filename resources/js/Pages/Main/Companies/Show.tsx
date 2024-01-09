@@ -1,25 +1,22 @@
 import { PageProps } from "@/types";
 import MainLayout from "@/Layouts/MainLayout";
-import { Company } from "@/types/models";
+import { Company, Segment } from "@/types/models";
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/Components/ui/table";
-import { PlusIcon } from "lucide-react";
+import { FoldersIcon, PlusIcon } from "lucide-react";
 
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-    DialogFooter,
 } from "@/Components/ui/dialog";
 import { Button } from "@/Components/ui/button";
 
@@ -35,7 +32,13 @@ import { Input } from "@/Components/ui/input";
 import { Label } from "@/Components/ui/label";
 import InputError from "@/Components/InputError";
 
-const ShowCompanyPage = ({ company }: { company: Company }) => {
+const ShowCompanyPage = ({
+    company,
+    segments,
+}: {
+    company: Company;
+    segments: Segment[];
+}) => {
     const {
         data: create_segment_data,
         errors: create_segment_error,
@@ -44,21 +47,41 @@ const ShowCompanyPage = ({ company }: { company: Company }) => {
         setData: create_segment_set_data,
         reset: create_segment_reset,
     } = useForm({
+        company_id: company.id,
         name: "",
+    });
+
+    const {
+        data: create_task_data,
+        errors: create_task_error,
+        processing: create_task_processing,
+        post: create_task,
+        setData: create_task_set_data,
+        reset: create_task_reset,
+    } = useForm({
+        segment_id: 0,
+        title: "",
     });
 
     const [openCreateSegmentModal, setOpenCreateSegmentModal] = useState(false);
 
+    const [openCreateTaskModal, setOpenCreateTaskModal] = useState(false);
+
     const handleCreateSegment = (e: FormEvent) => {
         e.preventDefault();
-
-        create_segment(route("segment.store"), {
+        create_segment(route("segments.store"), {
             onSuccess() {
                 create_segment_reset();
+                setOpenCreateSegmentModal(false);
             },
             preserveScroll: true,
             preserveState: true,
         });
+    };
+
+    const handleOpenCreateTaskModal = (segmentId: number) => {
+        setOpenCreateTaskModal(true);
+        create_task_set_data("segment_id", segmentId);
     };
 
     return (
@@ -84,7 +107,7 @@ const ShowCompanyPage = ({ company }: { company: Company }) => {
                             <DialogHeader>
                                 <DialogTitle>Create New Segment</DialogTitle>
                             </DialogHeader>
-                            <form>
+                            <form onSubmit={handleCreateSegment}>
                                 <div className="mb-3">
                                     <Label htmlFor="name">Name</Label>
                                     <Input
@@ -117,52 +140,99 @@ const ShowCompanyPage = ({ company }: { company: Company }) => {
                     </Dialog>
                 </div>
             </div>
-            <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                    <AccordionTrigger>
-                        <span>Is it accessible?</span>
-                    </AccordionTrigger>
-                    <AccordionContent>
-                        <hr />
-                        <div className=" sm:ml-5">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead colSpan={4}>
-                                            <div className="flex space-x-4 items-center">
-                                                <span> Task List</span>
-                                                <Button
-                                                    size="sm"
-                                                    variant="ghost"
-                                                >
-                                                    <PlusIcon className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                        </TableHead>
-                                        {/* <TableHead>
+            <div>
+                <Accordion type="multiple">
+                    {segments.map((segment) => (
+                        <AccordionItem value={segment.id.toString()}>
+                            <AccordionTrigger>
+                                <div className="flex space-x-2 items-center">
+                                    <FoldersIcon className="h-5 w-5" />
+                                    <span>{segment.name}</span>
+                                </div>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                                <hr />
+                                <div className="">
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow>
+                                                <TableHead colSpan={4}>
+                                                    <div className="flex space-x-4 items-center">
+                                                        <span> Task List</span>
+                                                        <Button
+                                                            size="sm"
+                                                            variant="ghost"
+                                                        >
+                                                            <PlusIcon className="h-4 w-4" />
+                                                        </Button>
+                                                    </div>
+                                                </TableHead>
+                                                {/* <TableHead>
                                             <div className="flex justify-end">
                                                 
                                             </div>
                                         </TableHead> */}
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell className="font-medium">
-                                            INV001
-                                        </TableCell>
-                                        <TableCell>Paid</TableCell>
-                                        <TableCell>Credit Card</TableCell>
-                                        <TableCell className="text-right">
-                                            $250.00
-                                        </TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell className="font-medium">
+                                                    INV001
+                                                </TableCell>
+                                                <TableCell>Paid</TableCell>
+                                                <TableCell>
+                                                    Credit Card
+                                                </TableCell>
+                                                <TableCell className="text-right">
+                                                    $250.00
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            </AccordionContent>
+                        </AccordionItem>
+                    ))}
+                </Accordion>
+            </div>
+            <Dialog
+                open={openCreateTaskModal}
+                onOpenChange={setOpenCreateTaskModal}
+            >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Create Task</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleCreateSegment}>
+                        <div className="mb-3">
+                            <Label htmlFor="name">Title</Label>
+                            <Input
+                                id="name"
+                                type="text"
+                                name="name"
+                                value={create_task_data.title}
+                                className="mt-1 block w-full"
+                                onChange={(e) =>
+                                    create_task_set_data(
+                                        "title",
+                                        e.target.value
+                                    )
+                                }
+                            />
+                            <InputError
+                                message={create_task_error.title}
+                                className="mt-2"
+                            />
                         </div>
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
+                        <div className="mt-4 flex items-center space-x-2">
+                            <Button>Save</Button>
+                            <Button variant="outline" type="button">
+                                Cancel
+                            </Button>
+                        </div>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };

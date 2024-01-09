@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Main;
 
-use App\Models\Main\SegmentController;
+use App\Http\Controllers\Controller;
+use App\Models\Segment;
 use Illuminate\Http\Request;
 
-class SegmentControllerController extends Controller
+class SegmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,13 +29,20 @@ class SegmentControllerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'company_id'=>['required'],
+            'name'=>['required']
+        ]);
+
+        Segment::create($data);
+
+        return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(SegmentController $segmentController)
+    public function show(string $id)
     {
         //
     }
@@ -42,7 +50,7 @@ class SegmentControllerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(SegmentController $segmentController)
+    public function edit(string $id)
     {
         //
     }
@@ -50,7 +58,7 @@ class SegmentControllerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SegmentController $segmentController)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -58,7 +66,7 @@ class SegmentControllerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SegmentController $segmentController)
+    public function destroy(string $id)
     {
         //
     }

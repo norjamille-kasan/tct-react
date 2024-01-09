@@ -11,4 +11,9 @@ class Company extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
+
+    public function segments()
+    {
+        return $this->hasMany(Segment::class);
+    }
 }

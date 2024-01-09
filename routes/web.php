@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
    Route::resource('companies',\App\Http\Controllers\Main\CompanyController::class);
+   Route::resource('segments',\App\Http\Controllers\Main\SegmentController::class);
    Route::resource('users',\App\Http\Controllers\Main\UserController::class);
    Route::resource('roles-and-permissions',\App\Http\Controllers\Main\RoleAndPermissionController::class);
 });

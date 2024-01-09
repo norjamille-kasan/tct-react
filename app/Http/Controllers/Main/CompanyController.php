@@ -81,8 +81,9 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
-            return Inertia::render('Main/Companies/Show',[
-            'company' => $company
+        return Inertia::render('Main/Companies/Show',[
+            'company' => $company,
+            'segments'=> $company->segments
         ]);
     }
 
